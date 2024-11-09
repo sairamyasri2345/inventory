@@ -12,12 +12,9 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://sri951591:8At1ARY1sNp09Czj@cluster0.glhre.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect("mongodb+srv://sairamyasri7070:WLm9MNSFGHyyLshL@cluster0.399is.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
 
-
-
-
-  useNewUrlParser: true,
+useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => console.log("Connected to MongoDB"))

@@ -17,7 +17,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQ.K"); // Your secret key
+    const decoded = jwt.verify(token, "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQYTREDJYKFVDK"); // Your secret key
     req.user = { id: decoded.id }; // Attach user ID to request object
     next();
   } catch (err) {

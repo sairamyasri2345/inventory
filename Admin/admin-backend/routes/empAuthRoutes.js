@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
     // Generate JWT token if authentication is successful
     const token = jwt.sign(
       { id: employee._id, email: employee.email },
-      "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQ.K",
+      "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQYTREDJYKFVDK",
       { expiresIn: "1h" }
     );
 
@@ -68,7 +68,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQ.K");
+    const decoded = jwt.verify(token, "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQYTREDJYKFVDK");
     req.user = { id: decoded.id };
     next();
   } catch (err) {

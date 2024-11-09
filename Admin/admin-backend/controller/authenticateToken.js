@@ -8,7 +8,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(403).json({ message: "Access Denied, No Token Provided" });
   }
 
-  jwt.verify(token, "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQ.K", (err, user) => {
+  jwt.verify(token, "@453$^4532#@$!%^!T~Yvfwgd@$^%TyvgdY48IHYEQYTREDJYKFVDK", (err, user) => {
     if (err) {
       return res.status(403).json({ message: "Invalid or expired token" });
     }
