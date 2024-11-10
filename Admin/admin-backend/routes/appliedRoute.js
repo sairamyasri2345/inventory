@@ -62,14 +62,7 @@ router.delete('/apply/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-// router.get('/all', async (req, res) => {
-//   try {
-//     const appliedProducts = await AppliedProduct.find();
-//     res.status(200).json(appliedProducts);
-//   } catch (error) {
-//     res.status(500).json({ message: "Error fetching applied products", error: error.message });
-//   }
-// });
+
 
 router.get('/', async (req, res) => {
   try {
@@ -84,33 +77,62 @@ router.get('/', async (req, res) => {
 
 
 
-// Update product status
 // router.put('/update-status/:id', async (req, res) => {
 //   try {
 //     const { id } = req.params;
-//     const { status } = req.body;
+//     const { status } = req.body; // New status value (approved, pending, not available)
 
+//     // Update the status of the applied product in the database
 //     const appliedProduct = await AppliedProduct.findByIdAndUpdate(id, { status }, { new: true });
-//     if (!appliedProduct) return res.status(404).json({ message: 'Applied product not found' });
+//     if (!appliedProduct) {
+//       return res.status(404).json({ message: 'Applied product not found' });
+//     }
 
-//     // Send email notification (assuming you have a sendEmail utility)
-//     sendEmail(appliedProduct.employeeEmail, `Your application status for ${appliedProduct.productName} has been updated to ${status}`);
+//     // Compose the email message based on the new status
+//     let emailMessage = '';
+//     switch (status) {
+//       case 'approved':
+//         emailMessage = `Congratulations! Your application for the product "${appliedProduct.productName}" has been approved.`;
+//         break;
+//       case 'not available':
+//         emailMessage = `We regret to inform you that the product "${appliedProduct.productName}" you applied for is currently not available.`;
+//         break;
+//       case 'pending':
+//         emailMessage = `Your application for the product "${appliedProduct.productName}" is still pending. Please check back later for updates.`;
+//         break;
+//       default:
+//         emailMessage = `The status of your product application has been updated.`;
+//         break;
+//     }
 
-//     res.json(appliedProduct);
+//     // Send email notification to the employee
+//     await sendEmail(Employee.email, emailMessage);
+//     console.log(Employee.email,"email",Employee)
+
+//     res.json({ message: 'Status updated and email sent', appliedProduct });
 //   } catch (error) {
+//     console.error("Error updating status:", error);
 //     res.status(500).json({ message: error.message });
 //   }
 // });
 
+// Function to send email
+
 router.put('/update-status/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body; // New status value (approved, pending, not available)
+    const { status } = req.body; 
 
     // Update the status of the applied product in the database
     const appliedProduct = await AppliedProduct.findByIdAndUpdate(id, { status }, { new: true });
     if (!appliedProduct) {
       return res.status(404).json({ message: 'Applied product not found' });
+    }
+
+    // Find the employee's email using the employeeID from the applied product
+    const employee = await Employee.findOne({ employeeID: appliedProduct.employeeID });
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
     }
 
     // Compose the email message based on the new status
@@ -131,7 +153,8 @@ router.put('/update-status/:id', async (req, res) => {
     }
 
     // Send email notification to the employee
-    await sendEmail(Employee.email, emailMessage);
+    await sendEmail(employee.email, emailMessage);
+    console.log(employee.email, "email");
 
     res.json({ message: 'Status updated and email sent', appliedProduct });
   } catch (error) {
@@ -140,21 +163,20 @@ router.put('/update-status/:id', async (req, res) => {
   }
 });
 
-// Function to send email
+
 const sendEmail = (to, message) => {
   const transporter = nodemailer.createTransport({
-
-     host: 'smtp.atmoslifestyle.com', 
-  port: 587, // Use the appropriate port (587 for TLS, 465 for SSL)
-  secure: false,
+    host: 'smtp.gmail.com', 
+  port:465, 
+  secure: true,
     auth: {
-      user: 'admin@atmoslifestyle.com',
-      pass: 'Atmos',
+      user: 'usairamyasri@gmail.com',
+      pass: 'hcabqbadxxewptmh',
     },
   });
 
   const mailOptions = {
-    from: 'admin@atmoslifestyle.com',
+    from: 'usairamyasri@gmail.com',
     to,
     subject: 'Product Application Status Update',
     text: message,
